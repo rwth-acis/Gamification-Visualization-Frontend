@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Gamification Dashboard" description="Gamification Visualization Dashboard"
+  <ModulePrefs title="Gamification Visualization" description="Gamification Visualization Dashboard"
     author="Muhammad Abduh Arifin" author_email="arifin@dbis.rwth-aachen.de"
-    width="300" height="600">
+    width="768" height="600">
 
     <Require feature="opensocial-0.8"></Require>
     <Require feature="openapp"></Require>
@@ -38,12 +38,13 @@
     <!-- Bootstrap core CSS -->
   <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
   <link rel="stylesheet" href="http://rwth-acis.github.io/Gamification-Visualization-Frontend/css/font-awesome.css">
-<link href="http://rwth-acis.github.io/Gamification-Visualization-Frontend/css/vis.css" rel="stylesheet"> 
+<link href="http://rwth-acis.github.io/Gamification-Visualization-Frontend/css/vis.css" rel="stylesheet">
 
   </head>
 
   <body>
 <div id="container-text">
+  <button id="refreshbutton" type="button" class="btn btn-info pull-right"> <span class=" glyphicon glyphicon-refresh"></button>
 <h3>
   You are not authenticated, try to login using Open ID Learning Layers.
 </h3>
@@ -71,7 +72,7 @@
         <!-- HOME -->
         <div class="tab-pane active" id="vishome">
 
-            
+
       <script id="memberStatusTemplate" type="text/template">
         <h3>Hi <b><%= userName%>!</b></h3>
         <br><br>
@@ -86,6 +87,7 @@
                                 </span>
                           </span>
                       </span>
+                      <h4><%= pointUnitName%></h4>
                     </div>
                 <div class="col-sm-4 text-center">
                       <h2>Level</h2>
@@ -98,10 +100,10 @@
                            <%= progress%> %
                         </span>
                 </div>
-                  
+
               </div>
                  <div class="col-sm-4 text-center">
-                  
+
                   <h3>Rank</h3>
                     <span class="fa-stack fa-3x text-info">
                       <i class="fa fa-trophy fa-stack-2x"></i>
@@ -114,7 +116,7 @@
                 </div>
               </div>
       </script>
-      
+
             <div class="container" id="user-main-status">
       </div>
 
@@ -134,7 +136,7 @@
 
             <h3 class="page-header">Your Badges</h3>
       <div class="row placeholders" id="badge-row-container">
-        
+
         <div class="col-xs-6 col-sm-3 placeholder">
           <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="100" height="100" class="img-responsive" alt="Generic placeholder thumbnail">
           <h4>Label</h4>
@@ -234,10 +236,10 @@
             <% for(var i = 0; i < actionArray.length; i++) { %>
             <div class="col-xs-6 col-sm-3 placeholder">
               <div class="circleQuestProgress" id="<%= actionArray[i].action %>">
-                <h4 class="queststatus <% if(actionArray[i].isCompleted){ %> 
+                <h4 class="queststatus <% if(actionArray[i].isCompleted){ %>
                         text-info
                         <% } else { %>
-                        
+
                         <% } %>">
                  <b><%= actionArray[i].times %>/<%= actionArray[i].maxTimes %></b>
                 </h4>
@@ -247,21 +249,21 @@
                       </span> -->
                        <span class="label">
                          <!-- <%= actionArray[i].times %>/<%= actionArray[i].maxTimes %>  -->
-                      </span> 
+                      </span>
 
-                      
+
               </div>
               <h4><%= actionArray[i].action %> </h4>
-              
+
             </div>
             <% } %>
-            
-                
+
+
             </div>
 
           <div class="row">
           <div class="progress">
-                
+
                 <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="<%= progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= progress %>%;">
                   <%= progress %>%
                 </div>
@@ -270,7 +272,7 @@
         </div>
       </script>
       <br>
-          <div class="container-fluid"> 
+          <div class="container-fluid">
               <div class="row" id="quest-row-container">
               <div class="col-md-6">
                 <div class="panel-group">
@@ -337,10 +339,10 @@
       <div class="input-group">
             <input type="text" class="form-control" placeholder="Action name" id="triggeraction">
         <span class="input-group-btn">
-              <button class="btn btn-secondary" type="button" id="triggeraction" >Trigger!</button>   
+              <button class="btn btn-secondary" type="button" id="triggeraction" >Trigger!</button>
           </span>
-      
-      </div> 
+
+      </div>
     </div>
         <!-- END TRIGGER ACTION -->
       </div>
@@ -349,7 +351,21 @@
     <div class="center">
         <img alt="" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/img/loading.svg" />
     </div>
-</div> 
+</div>
+<!-- modal notification -->
+<div class="modal" id="modalnotif" role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4>Notification</h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+    </div>
+  </div>
+</div>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -363,13 +379,13 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.fa.min.js"></script>
 
-  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/iwc.js"></script> 
-  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/oidc-widget.js"></script> 
-  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/las2peerWidgetLibrary.js"></script> 
-  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/circle-progress.js"></script> 
+  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/iwc.js"></script>
+  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/oidc-widget.js"></script>
+  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/las2peerWidgetLibrary.js"></script>
+  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/circle-progress.js"></script>
 <!--   <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/client.js"></script>  -->
-    <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/gamification-framework.js"></script> 
-    <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/vis.js"></script> 
+    <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/gamification-framework.js"></script>
+    <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/vis.js"></script>
 
  </body>
 </html>

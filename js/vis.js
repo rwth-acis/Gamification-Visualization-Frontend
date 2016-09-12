@@ -340,26 +340,38 @@ var init = function() {
             $('#vis_container').prop('hidden',true);
         }
     }    
-    // if(intent.action == "FETCH_APPID_CALLBACK"){
-    //   var data = JSON.parse(intent.data);
-    //   if(data.receiver == "badge"){
-    //     if(data.appId){
-    //       setAppIDContext(data.appId);
-    //     }
-    //     else{
-    //       miniMessageAlert(notification,"Application ID in Gamification Manager Application is not selected","danger")
-    //     }
-    //   }
-    // }
+
+    if(intent.action == "OPEN_NOTIFICATION"){
+        $("#modalnotif").find(".modal-body").empty();
+        var notif_data = JSON.parse(intent.data);
+        var notif_data_html = "";
+        for(n in notif_data){
+            notif_data_html += "<div><font color=\"green\">"+n.type+"</font> <font color=\"blue\">"+n.typeId+"</font> : " + message;
+            if(n.otherMessage){
+                notif_data_html += "<img src=\""+n.otherMessage+"\"></img></div>";
+            }
+            else{
+                notif_data_html += "</div>";
+            }
+        }
+        $("#modalnotif").find(".modal-body").append(notif_data_html);
+
+        $("#modalnotif").modal('show');
+    }    
+    
+
+   
   };
   client = new Las2peerWidgetLibrary("http://127.0.0.1:8081/", iwcCallback);
   //notification = new gadgets.MiniMessage("GAMEBADGE");
 
-    currentAppId = "test";
-    memberId = "user1";
+    //currentAppId = "test";
+    //memberId = "user1";
     console.log(currentAppId);
     console.log(memberId);
-
+    $('button#refreshbutton').on('click', function() {
+        sendIntentFetchAppId();
+    });
     
 
     if(currentAppId){
@@ -437,6 +449,12 @@ var init = function() {
   $('button#refreshbutton').on('click', function() {
     sendIntentFetchAppId("badge");
   });
+}
+
+function sendIntentFetchAppId(sender){
+  client.sendIntent(
+    "FETCH_APPID"
+ );
 }
 
 function signinCallback(result) {
