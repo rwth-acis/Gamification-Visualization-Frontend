@@ -2,7 +2,7 @@
 <Module>
   <ModulePrefs title="Gamification Visualization" description="Gamification Visualization Dashboard"
     author="Muhammad Abduh Arifin" author_email="arifin@dbis.rwth-aachen.de"
-    width="768" height="600">
+    width="800" height="600">
 
     <Require feature="opensocial-0.8"></Require>
     <Require feature="openapp"></Require>
@@ -44,10 +44,11 @@
 
   <body>
 <div id="container-text">
-  <button id="refreshbutton" type="button" class="btn btn-info pull-right"> <span class=" glyphicon glyphicon-refresh"></button>
+
 <h3>
   You are not authenticated, try to login using Open ID Learning Layers.
 </h3>
+<!--   <button id="refreshbutton" type="button" class="btn btn-info pull-right"> <span class=" glyphicon glyphicon-refresh"></button> -->
 </div>
 <div class="row-offcanvas row-offcanvas-left" id="vis-container">
   <div id="sidebar" class="sidebar-offcanvas">
@@ -60,6 +61,7 @@
       <li><a data-toggle="tab" href="#vislocalleaderboard" class="text-center" title="Local leaderboard"><i class="fa fa-list-alt fa-2x" aria-hidden="true"></i></a></li>
       <li><a data-toggle="tab" href="#visgloballeaderboard" class="text-center" title="Global leaderboard"><i class="fa fa-globe" aria-hidden="true"></i><i class="fa fa-list-alt fa-2x" aria-hidden="true"></i></a></li>
       <li><a data-toggle="tab" href="#vistriggeraction" class="text-center"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></a></li>
+      <li><a id="refreshbutton" class="text-center"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a></li>
       </ul>
     </div>
   </div>
@@ -76,6 +78,9 @@
       <script id="memberStatusTemplate" type="text/template">
         <h3>Hi <b><%= userName%>!</b></h3>
         <br><br>
+        <div class="form-group text-center">
+          <h4><b><%= appIdText%></b></h4>
+         </div>
          <div class="row">
                <div class="col-sm-4 text-center">
                       <h3>Point</h3>
@@ -383,9 +388,8 @@
   <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/oidc-widget.js"></script>
   <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/las2peerWidgetLibrary.js"></script>
   <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/circle-progress.js"></script>
-<!--   <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/client.js"></script>  -->
-    <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/gamification-framework.js"></script>
-    <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/vis.js"></script>
+  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/gamification-framework.js"></script>
+  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/vis.js"></script>
 
  </body>
 </html>

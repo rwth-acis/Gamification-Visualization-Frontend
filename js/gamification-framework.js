@@ -4,7 +4,6 @@ var GFramework = function (appId,memberId, serviceEndPoint){
     this._memberId = memberId;
     this._appId = appId;
     this.util.setServiceEndPoint(serviceEndPoint);
-   
 };  
 
 GFramework.prototype.util = function(){
@@ -256,7 +255,6 @@ GFramework.prototype.util = function(){
 	}
 
 }();
-
 
 GFramework.prototype.getApplicationId = function(){
     return this._appId;

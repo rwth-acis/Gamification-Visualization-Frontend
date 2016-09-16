@@ -1,8 +1,7 @@
 
 var memberId, currentAppId;
-var epURL = "http://localhost:8081/";
-var client;
-var GF;
+var epURL = "http://gaudi.informatik.rwth-aachen.de:8081/";
+var GF, iwcClient;
 
 
 function useAuthentication(rurl){
@@ -20,7 +19,8 @@ function getBadgeImage(badgeId){
 }
 
 var renderError = function(error, element, message){
-    element.html(message + " " + error);
+    var e = JSON.parse(error);
+    element.html(message + " " + e.message);
 };
 
 var QuestVisualization = (function(){
@@ -40,8 +40,8 @@ var QuestVisualization = (function(){
 				renderCompletedQuest(completedQuests);
 				renderRevealedQuest(revealedQuests);
 			},
-			function(error){
-                renderError(error,questElement,"Error cannot contact the server.");
+			function(error, errStatus){
+                renderError(errStatus,questElement,"Error cannot contact the server.");
 			});
 	};
 	var renderCompletedQuest=function (completedQuests) {
@@ -108,8 +108,8 @@ var QuestVisualization = (function(){
                     });
                     
 		 		},
-		 		function(error){
-                    renderError(error,questRevealedElement,"Error cannot contact the server.");
+		 		function(error,errStatus){
+                    renderError(errStatus,questRevealedElement,"Error cannot contact the server.");
 		 		}
 		 	);
         });
@@ -131,8 +131,8 @@ var BadgeVisualization = (function(){
 				console.log(data);
 				renderBadges(data);
 			},
-			function(error){
-                renderError(error,badgeElement,"Error cannot contact the server.");
+			function(error,errStatus){
+                renderError(errStatus,badgeElement,"Error cannot contact the server.");
 			});
 	};
 	var renderBadges=function (badges) {
@@ -174,8 +174,8 @@ var AchievementVisualization = (function(){
 				console.log(data);
 				renderAchievements(data);
 			},
-			function(error){
-                renderError(error,achievementElement,"Error cannot contact the server.");
+			function(error,errStatus){
+                renderError(errStatus,achievementElement,"Error cannot contact the server.");
 			});
 	};
 	var renderAchievements=function (achievements) {
@@ -207,11 +207,12 @@ var MemberStatusVisualization = (function(){
 				console.log(data);
 				renderMemberStatus(data);
 			},
-			function(error){
-                renderError(error,memberStatusElement,"Error cannot contact the server.");
+			function(error, errStatus){
+                renderError(errStatus,memberStatusElement,"Error cannot contact the server.");
 			});
 	};
 	var renderMemberStatus=function (data) {
+        data.appIdText = currentAppId;
         var tmpl = _.template($("#memberStatusTemplate").html()); 
         memberStatusElement.empty();
 
@@ -250,7 +251,7 @@ var MemberStatusVisualization = (function(){
 		    //$this.find('.label').html(parseInt(100 * v) + '<i>%</i>');
 		});
         if(data.nextLevelPoint == null){
-            $('#memberStatusProgress').find('.label').html(data.memberPoint+" / "+data.nextLevelPoint);
+            $('#memberStatusProgress').find('.label').html(data.memberPoint+" / - ");
         }else{
             $('#memberStatusProgress').find('.label').html(data.memberPoint+" / "+data.nextLevelPoint);
         }
@@ -326,29 +327,25 @@ function reloadActiveTab(){
 
 
 var init = function() {
+    iwcClient = new iwc.Client();
   var iwcCallback = function(intent) {
     console.log(intent);
     if(intent.action == "REFRESH_APPID"){
-      
-       setAppIDContext(intent.data);
+       //setAppIDContext(intent.data);
        currentAppId = intent.data;
-       GF  = new GFramework(currentAppId,memberId, epURL);
-
-       if(!currentAppId){
-            $('#container-text').html('App ID is not found');
-            $('#container-text').prop('hidden',false);
-            $('#vis_container').prop('hidden',true);
-        }
+       //GF  = new GFramework(currentAppId,memberId, epURL);
+       checkAppId();
     }    
 
     if(intent.action == "OPEN_NOTIFICATION"){
         $("#modalnotif").find(".modal-body").empty();
         var notif_data = JSON.parse(intent.data);
         var notif_data_html = "";
-        for(n in notif_data){
-            notif_data_html += "<div><font color=\"green\">"+n.type+"</font> <font color=\"blue\">"+n.typeId+"</font> : " + message;
-            if(n.otherMessage){
-                notif_data_html += "<img src=\""+n.otherMessage+"\"></img></div>";
+        console.log(notif_data);
+        for (i = 0; i < notif_data.length; i++){
+            notif_data_html += "<div><font color=\"green\">"+notif_data[i].type+"</font> <font color=\"blue\">"+notif_data[i].typeId+"</font> : " + notif_data[i].message;
+            if(notif_data[i].otherMessage){
+                notif_data_html += "<img src=\""+notif_data[i].otherMessage+"\"></img></div>";
             }
             else{
                 notif_data_html += "</div>";
@@ -359,35 +356,31 @@ var init = function() {
         $("#modalnotif").modal('show');
     }    
     
+    if(intent.action == "REFRESH_TAB"){
+        reloadActiveTab();
+    }
 
    
   };
-  client = new Las2peerWidgetLibrary("http://127.0.0.1:8081/", iwcCallback);
-  //notification = new gadgets.MiniMessage("GAMEBADGE");
+  iwcClient.connect(iwcCallback);
+  //client = new Las2peerWidgetLibrary(epURL, iwcCallback);
+ //notification = new gadgets.MiniMessage("GAMEBADGE");
 
     //currentAppId = "test";
     //memberId = "user1";
     console.log(currentAppId);
     console.log(memberId);
-    $('button#refreshbutton').on('click', function() {
+    $('#sidebar').find('a#refreshbutton').click(function(e) {
+        e.preventDefault();
+        console.log("Click refresh");
         sendIntentFetchAppId();
     });
     
-
-    if(currentAppId){
-        $('#container-text').prop('hidden',true);
-        $('#vis_container').prop('hidden',false)
-
-       GF  = new GFramework(currentAppId,memberId, epURL);
-    }else{
-        $('#container-text').html('App ID is not selected, try refreshing the widget');
-        $('#container-text').prop('hidden',false);
-        $('#vis_container').prop('hidden',true);
-    }
-
+    checkAppId();
+   
 
     reloadActiveTab();
-    MemberStatusVisualization.load();
+    
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
         var currentTab = $(e.target).prop("title"); // get current tab
         switch(currentTab){
@@ -427,7 +420,7 @@ var init = function() {
     $("button#triggeraction").on("click", function() {
         var actionId = $("input#triggeraction").val();
         var endPointURL =  "visualization/actions/"+currentAppId+"/"+actionId+"/"+memberId;
-        client.sendRequest(
+        GF.util.sendRequest(
             "POST",
             endPointURL,
             "",
@@ -446,18 +439,43 @@ var init = function() {
         );
     });
 
-  $('button#refreshbutton').on('click', function() {
-    sendIntentFetchAppId("badge");
+  $('#sidebar').find('a#refreshbutton').click(function(e) {
+     e.preventDefault();
+     sendIntentFetchAppId();
   });
 }
 
-function sendIntentFetchAppId(sender){
-  client.sendIntent(
-    "FETCH_APPID"
- );
+function checkAppId(){
+     if(currentAppId){
+        $('#container-text').prop('hidden',true);
+        $('#vis_container').prop('hidden',false)
+        GF  = new GFramework(currentAppId,memberId, epURL);
+       
+       MemberStatusVisualization.load();
+       $("#appidtext").html(currentAppId);
+    }else{
+        $('#vis_container').prop('hidden',true);
+
+        $('#container-text').html('<h3>App ID is not found. Try to refresh the widget.</h3>');
+        $('#container-text').prop('hidden',false);
+    }
+
 }
 
-function signinCallback(result) {
+function sendIntentFetchAppId(){
+    var intent = {
+      "component": "",
+      "data": "",
+      "dataType": "text/xml",
+      "action": "FETCH_APPID",
+      "categories": ["", ""],
+      "flags": [void 0],
+      "extras": {}
+    };
+    iwcClient.publish(intent);
+}
+
+function signInCallback(result) {
     if(result === "success"){
         
         memberId = oidc_userinfo.preferred_username;
