@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Gamification Visualization" description="Gamification Visualization Dashboard"
+  <ModulePrefs title="Gamification Dashboard" description="Gamification Visualization Dashboard"
     author="Muhammad Abduh Arifin" author_email="arifin@dbis.rwth-aachen.de"
-    width="800" height="600">
+    width="768" height="600">
 
     <Require feature="opensocial-0.8"></Require>
     <Require feature="openapp"></Require>
@@ -37,18 +37,16 @@
 
     <!-- Bootstrap core CSS -->
   <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  <link rel="stylesheet" href="http://rwth-acis.github.io/Gamification-Visualization-Frontend/css/font-awesome.css">
-<link href="http://rwth-acis.github.io/Gamification-Visualization-Frontend/css/vis.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://dl.dropboxusercontent.com/u/57683747/visualization/css/font-awesome.css">
+<link href="https://dl.dropboxusercontent.com/u/57683747/visualization/css/vis.css" rel="stylesheet"> 
 
   </head>
 
   <body>
 <div id="container-text">
-
 <h3>
   You are not authenticated, try to login using Open ID Learning Layers.
 </h3>
-<!--   <button id="refreshbutton" type="button" class="btn btn-info pull-right"> <span class=" glyphicon glyphicon-refresh"></button> -->
 </div>
 <div class="row-offcanvas row-offcanvas-left" id="vis-container">
   <div id="sidebar" class="sidebar-offcanvas">
@@ -61,7 +59,6 @@
       <li><a data-toggle="tab" href="#vislocalleaderboard" class="text-center" title="Local leaderboard"><i class="fa fa-list-alt fa-2x" aria-hidden="true"></i></a></li>
       <li><a data-toggle="tab" href="#visgloballeaderboard" class="text-center" title="Global leaderboard"><i class="fa fa-globe" aria-hidden="true"></i><i class="fa fa-list-alt fa-2x" aria-hidden="true"></i></a></li>
       <li><a data-toggle="tab" href="#vistriggeraction" class="text-center"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></a></li>
-      <li><a id="refreshbutton" class="text-center"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a></li>
       </ul>
     </div>
   </div>
@@ -74,14 +71,12 @@
         <!-- HOME -->
         <div class="tab-pane active" id="vishome">
 
-          <script id="memberStatusTemplate" type="text/template">
-              <h3>Hi <b><%= userName%>!</b></h3>
-              <br><br>
-              <div class="form-group text-center">
-                  <h4><b><%= appIdText%></b></h4>
-              </div>
-              <div class="row">
-                  <div class="col-sm-4 text-center">
+            
+      <script id="memberStatusTemplate" type="text/template">
+        <h3>Hi <b><%= userName%>!</b></h3>
+        <br><br>
+         <div class="row">
+               <div class="col-sm-4 text-center">
                       <h3>Point</h3>
                       <span class="fa-stack fa-3x text-info">
                           <i class="fa fa-calendar-o fa-stack-2x text-info"></i>
@@ -91,40 +86,54 @@
                                 </span>
                           </span>
                       </span>
-                      <h4><%= pointUnitName%></h4>
-                  </div>
-                  <div class="col-sm-4 text-center">
+                    </div>
+                <div class="col-sm-4 text-center">
                       <h2>Level</h2>
-                      <div class="circleStatusProgress" id="memberStatusProgress">
-                          <h3 class="levelstatus text-info">
-                          <%= memberLevel%>
-                          </h3>
-                          <!-- <img src="https://robohash.org/roboavatar.png" alt="avatar" class="avatar"> -->
-                          <span class="label">
-                             <%= progress%> %
-                          </span>
-                      </div>
-                      <h4><%= memberLevelName%></h4>
-                  </div>
-                   <div class="col-sm-4 text-center">
-                      <h3>Rank</h3>
-                      <span class="fa-stack fa-3x text-info">
-                          <i class="fa fa-trophy fa-stack-2x"></i>
-                          <span class="fa fa-stack-1x">
-                              <span style="font-family:arial;font-size:30px; margin-top:-15px; display:block; color:white;">
-                                  <%= rank%>
-                              </span>
-                          </span>
+                  <div class="circleStatusProgress" id="memberStatusProgress">
+                  <h3 class="levelstatus text-info">
+                  <%= memberLevel%>
+                  </h3>
+                        <!-- <img src="https://robohash.org/roboavatar.png" alt="avatar" class="avatar"> -->
+                        <span class="label">
+                           <%= progress%> %
+                        </span>
+                </div>
+                  
+              </div>
+                 <div class="col-sm-4 text-center">
+                  
+                  <h3>Rank</h3>
+                    <span class="fa-stack fa-3x text-info">
+                      <i class="fa fa-trophy fa-stack-2x"></i>
+                        <span class="fa fa-stack-1x">
+                            <span style="font-family:arial;font-size:30px; margin-top:-15px; display:block; color:white;">
+                                <%= rank%>
+                            </span>
                       </span>
-                  </div>
-                  </div>
-          </script>
-
-            <div class="container" id="user-main-status">
+                  </span>
+                </div>
+              </div>
+      </script>
+      
+      <div class="container" id="user-main-status">
       </div>
+      <div class="container-fluid" >
+        <div class="row">
+            <div class="col-md-12">
+              
+               <div class="container-fluid">
+                   
+                  <button id="refreshbutton" type="button" class="btn btn-info pull-right"> <span class=" glyphicon glyphicon-refresh"></button>
+              </div>
+              
 
-
+            </div>
+            <div class="col-md-0">
+            </div>
+          </div>
         </div>
+
+      </div>
         <!-- END HOME -->
         <!-- BADGE -->
     <div class="tab-pane" id="visbadge">
@@ -139,7 +148,7 @@
 
             <h3 class="page-header">Your Badges</h3>
       <div class="row placeholders" id="badge-row-container">
-
+        
         <div class="col-xs-6 col-sm-3 placeholder">
           <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="100" height="100" class="img-responsive" alt="Generic placeholder thumbnail">
           <h4>Label</h4>
@@ -239,10 +248,10 @@
             <% for(var i = 0; i < actionArray.length; i++) { %>
             <div class="col-xs-6 col-sm-3 placeholder">
               <div class="circleQuestProgress" id="<%= actionArray[i].action %>">
-                <h4 class="queststatus <% if(actionArray[i].isCompleted){ %>
+                <h4 class="queststatus <% if(actionArray[i].isCompleted){ %> 
                         text-info
                         <% } else { %>
-
+                        
                         <% } %>">
                  <b><%= actionArray[i].times %>/<%= actionArray[i].maxTimes %></b>
                 </h4>
@@ -252,21 +261,21 @@
                       </span> -->
                        <span class="label">
                          <!-- <%= actionArray[i].times %>/<%= actionArray[i].maxTimes %>  -->
-                      </span>
+                      </span> 
 
-
+                      
               </div>
               <h4><%= actionArray[i].action %> </h4>
-
+              
             </div>
             <% } %>
-
-
+            
+                
             </div>
 
           <div class="row">
           <div class="progress">
-
+                
                 <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="<%= progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= progress %>%;">
                   <%= progress %>%
                 </div>
@@ -275,7 +284,7 @@
         </div>
       </script>
       <br>
-          <div class="container-fluid">
+          <div class="container-fluid"> 
               <div class="row" id="quest-row-container">
               <div class="col-md-6">
                 <div class="panel-group">
@@ -342,33 +351,19 @@
       <div class="input-group">
             <input type="text" class="form-control" placeholder="Action name" id="triggeraction">
         <span class="input-group-btn">
-              <button class="btn btn-secondary" type="button" id="triggeraction" >Trigger!</button>
+              <button class="btn btn-secondary" type="button" id="triggeraction" >Trigger!</button>   
           </span>
-
-      </div>
+      
+      </div> 
     </div>
         <!-- END TRIGGER ACTION -->
       </div>
 </div><!--/row-offcanvas -->
 <div id="modalspinner" style="display: none">
     <div class="center">
-        <img alt="" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/img/loading.svg" />
+        <img alt="" src="https://dl.dropboxusercontent.com/u/57683747/visualization/img/loading.svg" />
     </div>
-</div>
-<!-- modal notification -->
-<div class="modal" id="modalnotif" role="dialog">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4>Notification</h4>
-      </div>
-      <div class="modal-body">
-
-      </div>
-    </div>
-  </div>
-</div>
+</div> 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -382,13 +377,13 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.fa.min.js"></script>
 
-  <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/iwc.js"></script>
-  <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/oidc-widget.js"></script>
-  <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/las2peerWidgetLibrary.js"></script>
-  <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/circle-progress.js"></script>
-<!--   <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/client.js"></script>  -->
-    <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/gamification-framework.js"></script>
-    <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/vis.js"></script>
+  <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/iwc.js"></script> 
+  <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/oidc-widget.js"></script> 
+  <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/las2peerWidgetLibrary.js"></script> 
+  <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/circle-progress.js"></script> 
+<!--   <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/client.js"></script>  -->
+    <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/gamification-framework.js"></script> 
+    <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/vis.js"></script> 
 
  </body>
 </html>
