@@ -237,7 +237,7 @@ var MemberStatusVisualization = (function(){
 
             if(v < 0.25 || v > 0.75){
                 $this.find('.label').css({
-                    left: (x + size / 2) - 60,
+                    left: (x + size / 2) - 30,
                     top: y + size / 2 
                 });                
             }else{
@@ -340,17 +340,18 @@ var init = function() {
     if(intent.action == "OPEN_NOTIFICATION"){
         $("#modalnotif").find(".modal-body").empty();
         var notif_data = JSON.parse(intent.data);
-        var notif_data_html = "";
+        var notif_data_html = "<div class=\"container\">";
         console.log(notif_data);
         for (i = 0; i < notif_data.length; i++){
-            notif_data_html += "<div><font color=\"green\">"+notif_data[i].type+"</font> <font color=\"blue\">"+notif_data[i].typeId+"</font> : " + notif_data[i].message;
-            if(notif_data[i].otherMessage){
-                notif_data_html += "<img src=\""+notif_data[i].otherMessage+"\"></img></div>";
+            notif_data_html += "<div class=\"text-center\"><font color=\"green\">"+notif_data[i].type+"</font> <font color=\"blue\">"+notif_data[i].typeId+"</font> : " + notif_data[i].message;
+            if(notif_data[i].type=="BADGE"){
+                notif_data_html += "</div><div class=\"text-center\"><img class=\"center-block\" src="+getBadgeImage(notif_data[i].typeId)+" style=\"display: block;max-width:50px;max-height:50px;width: auto;height: auto;\"/></div><br>";
             }
             else{
                 notif_data_html += "</div>";
             }
         }
+        notif_data_html += "</div>";
         $("#modalnotif").find(".modal-body").append(notif_data_html);
 
         $("#modalnotif").modal('show');

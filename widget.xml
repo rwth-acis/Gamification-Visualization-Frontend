@@ -2,7 +2,7 @@
 <Module>
   <ModulePrefs title="Gamification Visualization" description="Gamification Visualization Dashboard"
     author="Muhammad Abduh Arifin" author_email="arifin@dbis.rwth-aachen.de"
-    width="800" height="600">
+    width="900" height="600">
 
     <Require feature="opensocial-0.8"></Require>
     <Require feature="openapp"></Require>
@@ -60,7 +60,7 @@
       <li><a data-toggle="tab" href="#visquest" class="text-center" title="Quest"><i class="fa fa-road fa-2x" aria-hidden="true"></i></a></li>
       <li><a data-toggle="tab" href="#vislocalleaderboard" class="text-center" title="Local leaderboard"><i class="fa fa-list-alt fa-2x" aria-hidden="true"></i></a></li>
       <li><a data-toggle="tab" href="#visgloballeaderboard" class="text-center" title="Global leaderboard"><i class="fa fa-globe" aria-hidden="true"></i><i class="fa fa-list-alt fa-2x" aria-hidden="true"></i></a></li>
-      <li><a data-toggle="tab" href="#vistriggeraction" class="text-center"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></a></li>
+<!--       <li><a data-toggle="tab" href="#vistriggeraction" class="text-center"><span class="glyphicon glyphicon-star" aria-hidden="true"></span></a></li> -->
       <li><a id="refreshbutton" class="text-center"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a></li>
       </ul>
     </div>
@@ -192,14 +192,15 @@
                           </label>
                             <p><%= pointValue%></p>
                           </div>
-
-                        <div class="col-md-6">
-                          <label>
-                            Achievement
-                          </label>
-                            <img src="<%= getBadgeImage(badgeId) %>" style="display: block;max-width:200px;max-height:200px;width: auto;
-                            height: auto;"/>
-                          </div>
+                            <% if(badgeId){ %>
+                              <div class="col-md-6">
+                                <label>
+                                  Achievement
+                                </label>
+                                  <img src="<%= getBadgeImage(badgeId) %>" style="display: block;max-width:200px;max-height:200px;width: auto;
+                                  height: auto;"/>
+                              </div>
+                            <% }%>
                         </div>
                       </div>
                   </div>
@@ -338,7 +339,7 @@
     </div>
         <!-- END GLOBAL LEADERBOARD -->
         <!-- TRIGGER ACTION -->
-    <div class="tab-pane" id="vistriggeraction">
+<!--     <div class="tab-pane" id="vistriggeraction">
       <div class="input-group">
             <input type="text" class="form-control" placeholder="Action name" id="triggeraction">
         <span class="input-group-btn">
@@ -346,7 +347,7 @@
           </span>
 
       </div>
-    </div>
+    </div> -->
         <!-- END TRIGGER ACTION -->
       </div>
 </div><!--/row-offcanvas -->
