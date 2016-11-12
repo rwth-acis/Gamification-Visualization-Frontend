@@ -78,7 +78,7 @@
               <h3>Hi <b><%= userName%>!</b></h3>
               <br><br>
               <div class="form-group text-center">
-                  <h4><b><%= appIdText%></b></h4>
+                  <h4><b><%= gameIdText%></b></h4>
               </div>
               <div class="row">
                   <div class="col-sm-4 text-center">
@@ -314,6 +314,7 @@
         <!-- END QUEST -->
         <!-- LOCAL LEADERBOARD -->
     <div class="tab-pane" id="vislocalleaderboard">
+      <h3 class="page-header">Leaderboard</h3>
       <table id="list_local_leaderboard" class="table table-condensed table-striped" data-toggle="bootgrid">
           <thead>
               <tr>
@@ -327,6 +328,7 @@
         <!-- END LOCAL LEADERBOARD -->
         <!-- GLOBAL LEADERBOARD -->
     <div class="tab-pane" id="visgloballeaderboard">
+      <h3 class="page-header">Global Leaderboard</h3>
       <table id="list_global_leaderboard" class="table table-condensed table-striped" data-toggle="bootgrid">
           <thead>
               <tr>
@@ -383,13 +385,13 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.fa.min.js"></script>
 
-  <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/iwc.js"></script>
-  <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/oidc-widget.js"></script>
-  <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/las2peerWidgetLibrary.js"></script>
-  <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/circle-progress.js"></script>
+  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/iwc.js"></script>
+  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/oidc-widget.js"></script>
+  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/las2peerWidgetLibrary.js"></script>
+  <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/circle-progress.js"></script>
 <!--   <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/client.js"></script>  -->
-    <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/gamification-framework.js"></script>
-    <script type="text/javascript" src="https://dl.dropboxusercontent.com/u/57683747/visualization/js/vis.js"></script>
+    <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/gamification-framework.js"></script>
+    <script type="text/javascript" src="http://rwth-acis.github.io/Gamification-Visualization-Frontend/js/vis.js"></script>
 
  </body>
 </html>

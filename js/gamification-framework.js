@@ -1,8 +1,8 @@
 var oidc_userinfo;
 
-var GFramework = function (appId,memberId, serviceEndPoint){
+var GFramework = function (gameId,memberId, serviceEndPoint){
     this._memberId = memberId;
-    this._appId = appId;
+    this._gameId = gameId;
     this.util.setServiceEndPoint(serviceEndPoint);
 };  
 
@@ -257,7 +257,7 @@ GFramework.prototype.util = function(){
 }();
 
 GFramework.prototype.getApplicationId = function(){
-    return this._appId;
+    return this._gameId;
 }
 GFramework.prototype.getMemberId = function(){
     return this._memberId;
@@ -265,26 +265,26 @@ GFramework.prototype.getMemberId = function(){
 GFramework.prototype.getServiceEndPoint = function(){
     return this.util.getServiceEndPoint();
 }
-GFramework.prototype.setApplicationId = function(appId){
-    this.setServiceEndPoint(appId);
+GFramework.prototype.setApplicationId = function(gameId){
+    this.setServiceEndPoint(gameId);
 }
 GFramework.prototype.setMemberId = function(memberId){
     this._memberId = memberId;
 }
 
 GFramework.prototype.getAllData = function(type, successCallback, errorCallback,options){
-	var endPointURL = "gamification/"+type+"/"+this._appId;
+	var endPointURL = "gamification/"+type+"/"+this._gameId;
 	this.util.getAll(endPointURL,successCallback, errorCallback, options);
 };
 	
 GFramework.prototype.getDataWithId = function(type,id,successCallback, errorCallback){
-	//currentAppId = window.localStorage["appid"];
-	var endPointURL = "gamification/"+type+"/"+this._appId+"/"+id;
+	//currentAppId = window.localStorage["gameid"];
+	var endPointURL = "gamification/"+type+"/"+this._gameId+"/"+id;
 	this.util.getOne(endPointURL,successCallback, errorCallback);
 };
 GFramework.prototype.createNewData = function(type,content,successCallback, errorCallback){
-	//currentAppId = window.localStorage["appid"];
-	var endPointURL = "gamification/"+type+"/"+this._appId;
+	//currentAppId = window.localStorage["gameid"];
+	var endPointURL = "gamification/"+type+"/"+this._gameId;
 	if(type === "quests"){
 		this.util.postOneWithJSON(endPointURL, content,successCallback, errorCallback);
 	}
@@ -294,8 +294,8 @@ GFramework.prototype.createNewData = function(type,content,successCallback, erro
 };
 
 GFramework.prototype.updateData = function(type,id,content,successCallback, errorCallback){
-	//currentAppId = window.localStorage["appid"];
-	var endPointURL = "gamification/"+type+"/"+this._appId+"/"+id;
+	//currentAppId = window.localStorage["gameid"];
+	var endPointURL = "gamification/"+type+"/"+this._gameId+"/"+id;
 	if(type === "quests"){
 		this.util.putOneWithJSON(endPointURL, content,successCallback, errorCallback);
 	}
@@ -305,16 +305,16 @@ GFramework.prototype.updateData = function(type,id,content,successCallback, erro
 };
 
 GFramework.prototype.deleteData = function(type,id,successCallback, errorCallback){
-	//currentAppId =window.localStorage["appid"];
-	var endPointURL = "gamification/"+type+"/"+this._appId+"/" + id;
+	//currentAppId =window.localStorage["gameid"];
+	var endPointURL = "gamification/"+type+"/"+this._gameId+"/" + id;
 	this.util.deleteOne(endPointURL,successCallback, errorCallback);
 };
 
 GFramework.prototype.getBadgeImage = function(badgeid){
-	//currentAppId = window.localStorage["appid"];
+	//currentAppId = window.localStorage["gameid"];
 	if(!this.util.isAnonymous()){
 		console.log("Authenticated request");
-		var rurl = this.util.getServiceEndPoint() + "gamification/badges/"+this._appId+"/" + badgeid + "/img";
+		var rurl = this.util.getServiceEndPoint() + "gamification/badges/"+this._gameId+"/" + badgeid + "/img";
 		return useAuthentication(rurl);
 	} else {
 		console.log("Anonymous request... ");
@@ -324,42 +324,42 @@ GFramework.prototype.getBadgeImage = function(badgeid){
 
 // Visualization
 GFramework.prototype.getMemberStatus = function(successCallback, errorCallback){
-	var endPointURL = "visualization/status/"+this._appId+"/"+this._memberId;
+	var endPointURL = "visualization/status/"+this._gameId+"/"+this._memberId;
 	this.util.getAllSimple(endPointURL,successCallback, errorCallback);
 };
 GFramework.prototype.getAllBadgesOfMember = function(successCallback, errorCallback){
-	var endPointURL = "visualization/badges/"+this._appId+"/"+this._memberId;
+	var endPointURL = "visualization/badges/"+this._gameId+"/"+this._memberId;
 	this.util.getAllSimple(endPointURL,successCallback, errorCallback);
 };
 GFramework.prototype.getAllAchievementsOfMember = function(successCallback, errorCallback){
-	var endPointURL = "visualization/achievements/"+this._appId+"/"+this._memberId;
+	var endPointURL = "visualization/achievements/"+this._gameId+"/"+this._memberId;
 	this.util.getAllSimple(endPointURL,successCallback, errorCallback);
 };
 // COMPLETED, REVEALED, ALL
 GFramework.prototype.getAllQuestWithStatusOfMember = function(questStatus, successCallback, errorCallback){
-	var endPointURL = "visualization/quests/"+this._appId+"/"+this._memberId+"/status/"+questStatus;
+	var endPointURL = "visualization/quests/"+this._gameId+"/"+this._memberId+"/status/"+questStatus;
 	this.util.getAllSimple(endPointURL,successCallback, errorCallback);
 };
 
 GFramework.prototype.getOneQuestProgressOfMember = function(questId, successCallback, errorCallback){
-	var endPointURL = "visualization/quests/"+this._appId+"/"+this._memberId+"/progress/"+questId;
+	var endPointURL = "visualization/quests/"+this._gameId+"/"+this._memberId+"/progress/"+questId;
 	return this.util.getAllSimple(endPointURL,successCallback, errorCallback);
 };
 
 GFramework.prototype.getOneBadgeDetailOfMember = function(badgeId, successCallback, errorCallback){
-	var endPointURL = "visualization/badges/"+this._appId+"/"+this._memberId+"/"+badgeId;
+	var endPointURL = "visualization/badges/"+this._gameId+"/"+this._memberId+"/"+badgeId;
 	this.util.getAllSimple(endPointURL,successCallback, errorCallback);
 };
 GFramework.prototype.getOneQuestDetailOfMember = function(questId, successCallback, errorCallback){
-	var endPointURL = "visualization/quests/"+this._appId+"/"+this._memberId+"/"+questId;
+	var endPointURL = "visualization/quests/"+this._gameId+"/"+this._memberId+"/"+questId;
 	this.util.getAllSimple(endPointURL,successCallback, errorCallback);
 };
 GFramework.prototype.getOneAchievementDetailOfMember = function(achievementId, successCallback, errorCallback){
-	var endPointURL = "visualization/achievements/"+this._appId+"/"+this._memberId+"/"+achievementId;
+	var endPointURL = "visualization/achievements/"+this._gameId+"/"+this._memberId+"/"+achievementId;
 	this.util.getAllSimple(endPointURL,successCallback, errorCallback);
 };
 GFramework.prototype.triggerAction = function(actionid,successCallback, errorCallback){
-	var endPointURL =  "visualization/actions/"+this._appId+"/"+actionid+"/"+this._memberId;
+	var endPointURL =  "visualization/actions/"+this._gameId+"/"+actionid+"/"+this._memberId;
 	this.util.sendRequest(
 	    "POST",
 	    endPointURL,
