@@ -1,2 +1,2 @@
 
-#Gamificaiton Visualization Frontend
+#Gamification Visualization Frontend

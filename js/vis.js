@@ -1,6 +1,6 @@
 
-var memberId, currentAppId;
-var epURL = "http://gaudi.informatik.rwth-aachen.de:8081/";
+var memberId, currentGameId;
+var epURL = "http://gaudi.informatik.rwth-aachen.de:8086/";
 var GF, iwcClient;
 
 
@@ -14,13 +14,24 @@ function useAuthentication(rurl){
 }
 
 function getBadgeImage(badgeId){
-    var endPoint = epURL + "visualization/badges/" + currentAppId + "/" + memberId + "/" + badgeId + "/img";
+    var endPoint = epURL + "visualization/badges/" + currentGameId + "/" + memberId + "/" + badgeId + "/img";
     return useAuthentication(endPoint);
 }
 
 var renderError = function(error, element, message){
     var e = JSON.parse(error);
-    element.html(message + " " + e.message);
+    if(e){
+        if (e.message === "Member is not registered in Game"){
+            element.html(e.message + ". You need to register yourself first in <a href=\"http://gaudi.informatik.rwth-aachen.de:8073/spaces/gamificationmanager/\" target=\"_blank\">Gamification manager</a> by selecting the game.");
+        }
+        else{
+            element.html(message + " " + e.message);
+        }
+    }
+    else{
+
+        element.html(message);
+    }
 };
 
 var QuestVisualization = (function(){
@@ -212,7 +223,7 @@ var MemberStatusVisualization = (function(){
 			});
 	};
 	var renderMemberStatus=function (data) {
-        data.appIdText = currentAppId;
+        data.gameIdText = currentGameId;
         var tmpl = _.template($("#memberStatusTemplate").html()); 
         memberStatusElement.empty();
 
@@ -264,8 +275,8 @@ var MemberStatusVisualization = (function(){
 
 
 var localLeaderboard = function(tableElement,objectFormatters, loadedHandler,callbackResponse){ 
-    var endPoint = epURL + "visualization/leaderboard/local/" + currentAppId + "/" + memberId;
-    $(tableElement).bootgrid("destroy");
+    var endPoint = epURL + "visualization/leaderboard/local/" + currentGameId + "/" + memberId;
+    //$(tableElement).bootgrid("destroy");
     var objectgrid = $(tableElement).bootgrid({
             ajax: true,
             ajaxSettings: {
@@ -291,8 +302,8 @@ var localLeaderboard = function(tableElement,objectFormatters, loadedHandler,cal
 }
 
 var globalLeaderboard = function(tableElement,objectFormatters, loadedHandler,callbackResponse){ 
-    var endPoint = epURL + "visualization/leaderboard/global/" + currentAppId + "/" + memberId;
-    $(tableElement).bootgrid("destroy");
+    var endPoint = epURL + "visualization/leaderboard/global/" + currentGameId + "/" + memberId;
+    //$(tableElement).bootgrid("destroy");
     var objectgrid = $(tableElement).bootgrid({
             ajax: true,
             ajaxSettings: {
@@ -330,17 +341,17 @@ var init = function() {
     iwcClient = new iwc.Client();
   var iwcCallback = function(intent) {
     console.log(intent);
-    if(intent.action == "REFRESH_APPID"){
-       //setAppIDContext(intent.data);
-       currentAppId = intent.data;
-       //GF  = new GFramework(currentAppId,memberId, epURL);
-       checkAppId();
+    if(intent.action == "REFRESH_GAMEID"){
+       //setGameIDContext(intent.data);
+       currentGameId = intent.data;
+       //GF  = new GFramework(currentGameId,memberId, epURL);
+       checkGameId();
     }    
 
     if(intent.action == "OPEN_NOTIFICATION"){
         $("#modalnotif").find(".modal-body").empty();
         var notif_data = JSON.parse(intent.data);
-        var notif_data_html = "<div class=\"container\">";
+        var notif_data_html = "";
         console.log(notif_data);
         for (i = 0; i < notif_data.length; i++){
             notif_data_html += "<div class=\"text-center\"><font color=\"green\">"+notif_data[i].type+"</font> <font color=\"blue\">"+notif_data[i].typeId+"</font> : " + notif_data[i].message;
@@ -351,7 +362,7 @@ var init = function() {
                 notif_data_html += "</div>";
             }
         }
-        notif_data_html += "</div>";
+        notif_data_html += "";
         $("#modalnotif").find(".modal-body").append(notif_data_html);
 
         $("#modalnotif").modal('show');
@@ -367,17 +378,17 @@ var init = function() {
   //client = new Las2peerWidgetLibrary(epURL, iwcCallback);
  //notification = new gadgets.MiniMessage("GAMEBADGE");
 
-    //currentAppId = "test";
+    //currentGameId = "test";
     //memberId = "user1";
-    console.log(currentAppId);
+    console.log(currentGameId);
     console.log(memberId);
     $('#sidebar').find('a#refreshbutton').click(function(e) {
         e.preventDefault();
         console.log("Click refresh");
-        sendIntentFetchAppId();
+        sendIntentFetchGameId();
     });
     
-    checkAppId();
+    checkGameId();
    
 
     reloadActiveTab();
@@ -394,20 +405,10 @@ var init = function() {
             case "Achievement":AchievementVisualization.load();
             break;
             case "Local leaderboard":
-                localLeaderboard(
-                    $('table#list_local_leaderboard'),
-                    {},
-                    function(objectgrid){},
-                    function(response){console.log(response.rows)}
-                );
+                $('table#list_local_leaderboard').bootgrid("reload");
             break;
             case "Global leaderboard":
-                globalLeaderboard(
-                    $('table#list_global_leaderboard'),
-                    {},
-                    function(objectgrid){},
-                    function(response){console.log(response.rows)}
-                );
+                $('table#list_global_leaderboard').bootgrid("reload");
             break;
         }
         console.log(currentTab);
@@ -420,7 +421,7 @@ var init = function() {
 
     $("button#triggeraction").on("click", function() {
         var actionId = $("input#triggeraction").val();
-        var endPointURL =  "visualization/actions/"+currentAppId+"/"+actionId+"/"+memberId;
+        var endPointURL =  "visualization/actions/"+currentGameId+"/"+actionId+"/"+memberId;
         GF.util.sendRequest(
             "POST",
             endPointURL,
@@ -442,33 +443,46 @@ var init = function() {
 
   $('#sidebar').find('a#refreshbutton').click(function(e) {
      e.preventDefault();
-     sendIntentFetchAppId();
+     sendIntentFetchGameId();
   });
 }
 
-function checkAppId(){
-     if(currentAppId){
+function checkGameId(){
+     if(currentGameId){
         $('#container-text').prop('hidden',true);
         $('#vis_container').prop('hidden',false)
-        GF  = new GFramework(currentAppId,memberId, epURL);
+        GF  = new GFramework(currentGameId,memberId, epURL);
        
        MemberStatusVisualization.load();
-       $("#appidtext").html(currentAppId);
+       localLeaderboard(
+            $('table#list_local_leaderboard'),
+            {},
+            function(objectgrid){},
+            function(response){console.log(response.rows)}
+        );
+
+       globalLeaderboard(
+            $('table#list_global_leaderboard'),
+            {},
+            function(objectgrid){},
+            function(response){console.log(response.rows)}
+        ); 
+       $("#gameidtext").html(currentGameId);
     }else{
         $('#vis_container').prop('hidden',true);
 
-        $('#container-text').html('<h3>App ID is not found. Try to refresh the widget.</h3>');
+        $('#container-text').html('<h3>Game ID is not found. Try to refresh the widget.</h3>');
         $('#container-text').prop('hidden',false);
     }
 
 }
 
-function sendIntentFetchAppId(){
+function sendIntentFetchGameId(){
     var intent = {
       "component": "",
       "data": "",
       "dataType": "text/xml",
-      "action": "FETCH_APPID",
+      "action": "FETCH_GAMEID",
       "categories": ["", ""],
       "flags": [void 0],
       "extras": {}
